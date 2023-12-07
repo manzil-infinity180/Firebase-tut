@@ -47,6 +47,10 @@ addItem.addEventListener('submit',(e)=>{
   addDoc(colRef,{
     title: addItem.title.value,
     author : addItem.author.value
+  }).then(()=>{
+    addItem.reset();
+  }).catch(err=>{
+    console.log(err.message);
   })
 })
 const deleteItem = document.querySelector('.delete')
