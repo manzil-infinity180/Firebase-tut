@@ -1,5 +1,6 @@
 import { initializeApp } from "firebase/app"
-import { getFirestore,collection, getDocs, addDoc, deleteDoc, doc, onSnapshot, where,query, orderBy, serverTimestamp
+import { getFirestore,collection, getDocs, addDoc, deleteDoc, doc, onSnapshot, where,query, orderBy, serverTimestamp,
+  getDoc
           } from "firebase/firestore"
 
 const firebaseConfig = {
@@ -82,3 +83,9 @@ deleteItem.addEventListener('submit', (e) => {
       console.log(err.message);
     })
 })
+
+// get single data 
+const docRef = doc(db,'books','KnI1Lq5Z7106HrlT98qf');
+onSnapshot(docRef,(doc)=>{
+  console.log(doc.data(),doc.id);
+});
