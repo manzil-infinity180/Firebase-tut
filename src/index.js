@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app"
-import { getFirestore,collection, getDocs, addDoc, deleteDoc, doc, onSnapshot
+import { getFirestore,collection, getDocs, addDoc, deleteDoc, doc, onSnapshot, where,query, orderBy, serverTimestamp
           } from "firebase/firestore"
 
 const firebaseConfig = {
@@ -29,8 +29,11 @@ const colRef = collection(db,'books');
 // console.log(err.message);
 // });
 
-// real time collection data
-onSnapshot(colRef,(snapshot)=>{
+// queries  and orderby 
+
+// const q = query(colRef,where("author","==","shreya"),orderBy("title","asc"));
+const q = query(colRef,orderBy("createdAt","asc"));
+onSnapshot(q,(snapshot)=>{
   console.log(snapshot.docs[0].data(),"id:", snapshot.docs[0].id);
   console.log(snapshot.docs.map((el)=>el.data()));
   
@@ -41,12 +44,25 @@ onSnapshot(colRef,(snapshot)=>{
     console.log(books)
 })
 
+// real time collection data
+// onSnapshot(colRef,(snapshot)=>{
+//   console.log(snapshot.docs[0].data(),"id:", snapshot.docs[0].id);
+//   console.log(snapshot.docs.map((el)=>el.data()));
+  
+//     const books =[];
+//     snapshot.forEach((doc)=>{
+//       books.push({...doc.data(),id: doc.id})
+//     });
+//     console.log(books)
+// })
+
 const addItem = document.querySelector('.add');
 addItem.addEventListener('submit',(e)=>{
   e.preventDefault();
   addDoc(colRef,{
     title: addItem.title.value,
-    author : addItem.author.value
+    author : addItem.author.value,
+    createdAt : serverTimestamp()
   }).then(()=>{
     addItem.reset();
   }).catch(err=>{
